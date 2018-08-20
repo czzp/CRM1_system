@@ -1,0 +1,297 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta charset="UTF-8">
+    {#		<base href="http://localhost:9090/crm/">#}
+
+    <title>修改客户信息</title>
+
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <LINK href="/static/admin.css" type=text/css
+          rel=stylesheet>
+    <script type="text/javascript"
+            src="/static/CheckForm.js"></script>
+    <script type="text/javascript"
+            src="/static/WdatePicker.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/static/FormValid.js"></script>
+    <script type="text/javascript">
+        console.log("{{ cus.customer_id }}")
+    </script>
+</head>
+
+<body>
+<form action="/crm/index/updateCustomer/" method="post" name="form2" onsubmit="return validator(this)" >
+    {% csrf_token %}
+{#    <input value="{{ cus.customer_id }}" name="customer_id"  readonly="readonly">#}
+    <table class=editTable cellSpacing=1 cellPadding=0 width="100%" align=center border=0>
+        <tr class=editHeaderTr>
+            <td class=editHeaderTd colSpan=7>
+                请修改客户信息
+                <input type="hidden" name="customer_id"
+                       value="{{ cus.customer_id }}" />
+            </td>
+        </tr>
+        <tr>
+            <td width="12%" bgcolor="#FFFDF0"><div align="center">负责员工：</div></td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select  name="user" style=" width: 145px">
+                    {% for user in userList %}
+                        {% if cus.user.user_name == user.user_name %}
+                            <option value="{{ user.user_id }}" selected="selected" style="color: gold">{{ user.user_name }}</option>
+                        {% else %}
+                            <option value="{{ user.user_id }}" >{{ user.user_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+            <td width="12%" bgcolor="#FFFDF0">
+                <div align="center">
+                    客户来源：
+                </div>
+            </td>
+            <td width="37%" colspan="3" bgcolor="#FFFFFF">
+                <select name="source" style="width: 145px">
+                    {% for sou in sourceList %}
+                        {% if cus.source.source_name == sou.source_name %}
+                            <option value="{{ sou.source_id }}" selected="selected" style="color: greenyellow">{{ sou.source_name }}</option>
+                        {% else %}
+                            <option value="{{ sou.source_id }}">{{ sou.source_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户姓名：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px" disabled="disabled"   name="customer_name"
+                       value="{{ cus.customer_name }}">
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户状态：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="condition" style="width: 145px">
+                    {% for con in conditionList %}
+                        {% if con.condition_name == cus.condition.condition_name %}
+                            <option value="{{ con.condition_id }}" selected="selected">{{ con.condition_name }}</option>
+                        {% else %}
+                            <option value="{{ con.condition_id }}" >{{ con.condition_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户性别：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                {% if cus.customer_sex == '男' %}
+                    <input type="radio" name="customer_sex" value="男" checked="checked"/>
+                    男
+                    <input type="radio" name="customer_sex" value="女"/>
+                    女
+                {% elif cus.customer_sex == '女' %}
+                    <input type="radio" name="customer_sex" value="男"/>
+                    男&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" name="customer_sex" value="女" checked="checked"/>
+                    女
+                {% endif %}
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户类型：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="type" style="width: 145px">
+                    {% for tp in typeList %}
+                        {% if cus.type.type_name == tp.type_name %}
+                            <option value="{{ tp.type_id }}" selected="selected">{{ tp.type_name }}</option>
+                        {% else %}
+                            <option value="{{ tp.type_id }}">{{ tp.type_name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    出生日期：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text"style=" width: 145px"  id="disabled" name="birth_day"
+                       value="{{ cus.birth_day|date:'Y-m-d h:i:s' }}"
+                       readonly="readonly" id="customerBirthday"
+                       onclick="WdatePicker({el:birth_day,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户手机：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"    valid="regexp"  regexp="^1[3|4|5|8][0-9]\d{8}$"   errmsg="请输入正确的手机号码!"   name="customer_mobile"
+                       value="{{ cus.concrete_model }}">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户QQ：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"   valid="isQQ"   errmsg="请输入正确的QQ号码!"  name="customer_qq"
+                       value="{{ cus.customer_qq }}">
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户地址：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"  maxlength="50" name="customer_address"
+                       value="{{ cus.customer_address }}">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户邮箱：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"  maxlength="50" name="customer_email"  valid="required|isEmail"  errmsg="Email不能为空|Email格式不对!" value="{{ cus.customer_email}}">
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户职位：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"  maxlength="50" name="customer_job"
+                       value="{{ cus.customer_job }}">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户微博：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px" maxlength="50"  name="customer_blog"
+                       value="{{ cus.customer_blog }}">
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户座机：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px" valid="isPhone"   errmsg="请输入正确的座机号码!" name="customer_tel"
+                       value="{{ cus.customer_tel }}">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户MSN：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px" maxlength="50"  name="customer_msn"
+                       value="{{ cus.customer_msn }}">
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    客户公司：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"  maxlength="50" name="customer_company"
+                       value="{{ cus.customer_company }}">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    创建人：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px" disabled="disabled" name="customer_addMan"
+                       value="{{ cus.customer_addman }}">
+                <input type="hidden"
+                       value="{{ cus.customer_changtime |date:'Y-m-d h:i:s' }}"
+                       name="customer_changtime">
+                <input type="hidden" name="customer_addtime"
+                       value="{{ cus.customer_addtime|date:'Y-m-d h:i:s'}}"
+                       readonly="readonly" id="customerAddTime">
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    修改人：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style=" width: 145px"  maxlength="50" name="change_man"
+                       value="{{ cus.change_man }}">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    备注：
+                </div>
+            </td>
+            <td colspan="6" bgcolor="#FFFFFF">
+			    <textarea rows="10" name="customer_remark" style="width: 100%; resize: none;">
+						{{ cus.customer_remark }}
+		        </textarea>
+            </td>
+        </tr>
+    </table>
+    <table class=editTable cellSpacing=1 cellPadding=0 width="100%"
+           align=center border=0>
+        <tr bgcolor="#ECF3FD">
+            <td width="36%"></td>
+            <td width="17%"><input type="submit" value="提交"></td>
+            <td width="4%"><input type="button" name="button"  onClick="history.back() "  value="返回"></td>
+            <td width="43%"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

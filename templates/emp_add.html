@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta charset="UTF-8">
+{#    <base href="http://localhost:8080/crm/">#}
+    <title>添加员工信息</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <LINK href="/static/admin.css" type=text/css rel=stylesheet>
+    <script type="text/javascript" src="/static/CheckForm.js"></script>
+    <script type="text/javascript" src="/My97DatePicker/WdatePicker.js"></script>
+    <script language="JavaScript" type="text/javascript" src="/static/FormValid.js"></script>
+    <script type="text/javascript">
+        function uuuu(idNum1,idNum2, mmesg,cmesg) {
+            console.log('123');
+            var flag2 = false;
+            var user1 = $('#'+ idNum1).val();
+            var k = "{{ userNameList }}";
+            k = k.replace(/&quot;/g,"").replace(/ /g,'');
+            k = k.substring(1,k.length-1).split(',');
+            console.log(typeof k);
+            console.log(k);
+            for (i in k) {
+                if (k[i]== user1) {
+                    console.log(k[i]);
+                    flag2 = true;
+                }
+            }
+            if (flag2) {
+                $('#'+ idNum2).html(mmesg);
+                $('#'+ idNum2).css({"color":"red"});
+{#                $('#userName').css({"border":"1px solid red"})#}
+            } else {
+                $('#'+ idNum2).html(cmesg);
+                $('#'+ idNum2).css({"color":"green"});
+{#                $('#userName').css({"border":"1px solid green"})#}
+            }
+        }
+
+        function yyyy() {
+            var idNum1 = 'userName';
+            var idNum2 = 'userSpan';
+            var mmesg = '×名字已存在';
+            var cmesg = '√';
+            uuuu(idNum1,idNum2,mmesg,cmesg)
+        }
+
+        function wwww() {
+            var idNum1 = 'userAddman';
+            var idNum2 = 'userAddSpan';
+            var mmesg = '√此名字可用';
+            var cmesg = '×此人不存在';
+            uuuu(idNum1,idNum2,mmesg,cmesg)
+        }
+
+        function get_userNum() {
+            console.log(123);
+            $.get('/crm/index/get_userNum/',{'num':$('#userNum').val()},function (res) {
+                console.log($('#userNum').val());
+                if(res.res){
+                    $('#userNumSpan').html('√');
+                    $('#userNumSpan').css({'color':'green'});
+                    $('#userNumSpan').css({'color':'green'})
+                }else {
+                    $('#userNumSpan').html('×账号已存在');
+                    $('#userNumSpan').css({'color':'red'});
+                    $('#userNum').css({'border':'1px solid red'})
+                }
+            })
+        }
+
+    </script>
+
+</head>
+
+<body>
+<form action="/crm/index/userAdd/"  name="form1" onsubmit="return validator(this)"   method="post"
+      name="form2" onsubmit="return checkForm('form2');">
+    {% csrf_token %}
+    <table class=editTable cellSpacing=1 cellPadding=0 width="100%"
+           align=center border=0>
+        <tr class=editHeaderTr>
+            <td class=editHeaderTd colSpan=7>
+                请输入新用户的详细信息
+            </td>
+        </tr>
+
+        <tr>
+            <td width="13%" bgcolor="#FFFDF0">
+                <div align="center">
+                    姓名：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" name="user_name" id="userName" onblur="yyyy()" maxlength="10" style="width: 145px" valid="required"  errmsg="员工姓名不能为空!" >
+                <span id="userSpan"></span>
+                <span id="userSpan1" style="display: none">{{ userNameList }}</span>
+
+            </td>
+            <td width="13%" bgcolor="#FFFDF0">
+                <div align="center">
+                    账号：
+                </div>
+            </td>
+            <td width="41%" colspan="3" bgcolor="#FFFFFF">
+                <input type="text" name="user_num" id="userNum" maxlength="20" style="width: 145px"  onblur="get_userNum()">
+                <span id="userNumSpan"></span>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    年龄：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" name="user_age" style="width: 145px"  maxlength="2"  valid="required|isNumber"  errmsg="员工年龄不能为空!|请输入正确的年龄!">
+                &nbsp;
+            </td>
+
+            <td bgcolor="#FFFDF0">
+                <div align="center" >
+                    密码：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="password" name="user_pw"  maxlength="20" style="width: 145px" valid="required"  errmsg="密码不能为空!">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0" style="height: 21px">
+                <div align="center">
+                    性别：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF" style="height: 21px">
+                <select name="user_sex" style="width: 145px">
+                    <option value="男">
+                        男
+                    </option>
+                    <option value="女">
+                        女
+                    </option>
+                </select>
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    民族：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  maxlength="5" name="user_nation">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    学历：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="user_diploma" style="width: 145px">
+                    <option>
+                        初中
+                    </option>
+                    <option>
+                        高中
+                    </option>
+                    <option>
+                        本科
+                    </option>
+                    <option>
+                        博士
+                    </option>
+                    <option>
+                        硕士
+                    </option>
+                </select>
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    婚姻：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="is_married" style="width: 145px">
+                    <option>
+                        已婚
+                    </option>
+                    <option>
+                        未婚
+                    </option>
+                    <option>
+                        离异
+                    </option>
+                </select>
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    部门：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="department" style="width: 145px" id="departmentId" onchange="deptSelect()">
+                    {% for foo in deptList %}
+                        <option value="{{ foo.department_id }}">{{ foo.department_name }}</option>
+                    {% endfor %}
+                </select>
+                &nbsp;
+            </td>
+
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    角色：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <select name="role" style="width: 145px" id="roleId" onchange="roleSelect()">
+                     {% for foo in roleList %}
+                        <option value="{{ foo.role_id }}">{{ foo.role_name }}--{{ foo.role_power }} </option>
+                    {% endfor %}
+                </select>
+                &nbsp;
+            </td>
+        </tr>
+
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    座机：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"    valid="isPhone"   errmsg="请输入正确的座机号码!"  name="user_tel">
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    爱好：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  maxlength="50" name="user_intest">
+                &nbsp;
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    工资卡号：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  valid="isNumber"   errmsg="请输入正确的工资卡号!"  maxlength="20"  name="user_bankcard" >
+                &nbsp;
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    手机：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  valid="regexp"  regexp="^1[3|4|5|8][0-9]\d{8}$"   errmsg="请输入正确的手机号码!"  name="user_mobile">
+                &nbsp;
+            </td>
+
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    身份证：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"   valid="isIdCard"   errmsg="请输入正确的身份证号码!" name="user_idnum">
+                <input type="hidden" value="2017-06-15 11:55:16" name="user_addtime">
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    地址：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" name="user_address"  maxlength="50" style="width: 145px">
+            </td>
+        </tr>
+
+        <tr>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    添加人：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  onblur="wwww()" id="userAddman" maxlength="20"  name="user_addman" valid="required"  errmsg="添加人不能为空!" >
+                <span id="userAddSpan"></span>
+            </td>
+            <td bgcolor="#FFFDF0">
+                <div align="center">
+                    E_mail：
+                </div>
+            </td>
+            <td colspan="3" bgcolor="#FFFFFF">
+                <input type="text" style="width: 145px"  valid="isEmail"  errmsg="Email格式不对!" name="user_email">
+                &nbsp;
+            </td>
+        </tr>
+
+
+    </table>
+    <table class=editTable cellSpacing=1 cellPadding=0 width="100%"
+           align=center border=0>
+        <tr bgcolor="#ECF3FD">
+            <td width="25%"></td>
+            <td width="17%"><input type="submit"  value="添加"></td>
+            <td width="17%"><input type="reset" name="reset"  value="重置"></td>
+            <td width="4%"><input type="button" name="button"  onClick="history.back() "  value="返回"></td>
+            <td width="43%"></td>
+        </tr>
+    </table>
+    {% if flag3 == 1 %}
+        <h1 align="center" style="color: green">添加成功</h1>
+    {% elif flag3 == 0 %}
+        <h1 align="center" style="color: red">添加失败，请检查数据</h1>
+    {% endif %}
+
+</form>
+</body>
+</html>

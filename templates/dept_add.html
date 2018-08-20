@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta charset="UTF-8">
+    {#    <base href="http://localhost:8080/crm/">#}
+
+    <title>添加部门信息</title>
+
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-ca>
+	<meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <script type="text/javascript" src="/static/CheckForm.js"></script>
+
+    <LINK href="/static/admin.css" type=text/css rel=stylesheet>
+    <script type="text/javascript"
+            src="/My97DatePicker/WdatePicker.js"></script>
+</head>
+
+<body>
+
+
+<form action="/crm/index/departmentAdd/" method="post">
+    {% csrf_token %}
+    {% if flag.values.0 %}
+        <h1 id="id1"  align="center" style="color: red;font-size: 40px;line-height: 30px">{{ flag.keys.0 }}</h1>
+    {% endif %}
+    <table class=editTable cellSpacing=1 cellPadding=0 width="100%" align=center border=0>
+        <tr class=editHeaderTr>
+            <td class=editHeaderTd colSpan=7>  请输入新部门的详细信息
+            </td>
+        </tr>
+        <tr>
+            <td width="19%" bgcolor="#FFFDF0"><div align="center">部门名称：</div></td>
+            <td colspan="3" bgcolor="#FFFFFF"><input type="text"  style=" width: 100%"  maxlength="20"  name="departmentName" check_str="部门名称">
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FFFDF0"><div align="center">部门描述：</div></td>
+            <td colspan="5" bgcolor="#FFFFFF"><textarea  rows="10" name="departmentDesc"   style="width:100%; resize:none; "s></textarea>
+                &nbsp;</td>
+        </tr>
+
+    </table>
+    <table  cellSpacing=1 cellPadding=0 width="100%" align=center border=0>
+        <tr bgcolor="#ECF3FD">
+            <td width="25%" align="center"><input type="submit" name="query"  value="查看全部" onclick="cde()" disabled></td>
+            <td width="17%" align="center"><input type="submit" name="submit"  value="添加" onclick="abc()"></td>
+            <td width="17%" align="center"><input type="reset" name="reset"  value="重置"></td>
+            <td width="24%" align="center"><input type="button" name="button"  onClick="history.back() "  value="返回"></td>
+            <td width="26%"></td>
+        </tr>
+    </table>
+</form>
+<table  cellSpacing=1 cellPadding=0 width="100%" align=center  border=0>
+    <tr bgcolor="#ECF3FD"><th>序号</th><th>部门名称</th><th>部门简介</th><th>操作</th></tr>
+    {% for foo in deptList %}
+        <tr bgcolor="#ECF3FD"><td align="center">{{ forloop.counter }}</td><td>{{ foo.department_name }}</td><td>{{ foo.department_desc }}</td><td>
+            <a href="/crm/index/departmentDel/?id={{ foo.department_id }}">删除</a></td></tr>
+    {% empty %}
+        <tr bgcolor="#ECF3FD"><td>暂时没有部门，请添加</td></tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

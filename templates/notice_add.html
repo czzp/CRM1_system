@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+        <meta charset="UTF-8">
+		<title>公告添加</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+		<meta http-equiv="description" content="This is my page">
+		<LINK href="/static/admin.css" type=text/css rel=stylesheet>
+        <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            function blur1() {
+                var user ={'user' :$('#user').val()};
+                $.get('/crm/index/getuser/',user,function (result) {
+                    if (result.result){
+                        $('#userSpan').html('有这个人');
+                    }else {
+                        $('#userSpan').html('没这个人');
+                    }
+                })
+            }
+             if( "{{ flag5 }}" == '1'){
+                console.log('111');
+                alert('不能为空')
+            }
+
+        </script>
+			<script type="text/javascript"
+			src="/static/CheckForm.js"></script>
+		<script type="text/javascript"
+			src="/static/WdatePicker.js"></script>
+		<script language="JavaScript" type="text/javascript" src="/static/FormValid.js"></script>
+
+	</head>
+
+	<body>
+		<form action="/crm/index/noticeAdd/" method="post" name="form2">
+            {% csrf_token %}
+			<table class=editTable cellSpacing=1 cellPadding=0 width="100%"
+				align=center border=0>
+				<tr class=editHeaderTr>
+					<td class=editHeaderTd colSpan=7>
+						添加公告信息
+						<input type="hidden" name="userId" value="1" readonly="readonly">
+					</td>
+				</tr>
+
+				<tr>
+					<td bgcolor="#FFFDF0">
+						<div align="center">
+							序号：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+						<input type="textarea" style="width: 200px;height:30px" name="userName" disabled readonly="readonly">
+						&nbsp;
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#FFFDF0" style="height: 21px">
+						<div align="center">
+							公告主题：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+						<input type="text"  style="width: 200px;height:30px" name="notice_item" >&nbsp;
+					</td>
+				</tr>
+
+				<tr>
+					<td bgcolor="#FFFDF0">
+						<div align="center">
+							公告时间：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+{#						<input type="text"  name="birth_day"  style=" width: 145px"    valid="required"  errmsg="出生日期不能为空!"  id="customerBirthday"  onclick="WdatePicker({el:customerBirthday,dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>#}
+{#                        <input type="text"  style="width: 200px;height:30px" name="notice_time"  style=" width: 145px"    valid="required"  errmsg="出生日期不能为空!"  onclick="WdatePicker({el:customerBirthday,dateFmt:'yyyy-MM-dd HH:mm:ss'})">#}
+                        <input type="datetime-local"  style="width: 200px;height:30px" name="notice_time"  style=" width: 145px" errmsg="日期不能为空!"  onclick="WdatePicker({el:customerBirthday,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+					</td>
+				</tr>
+				<tr>
+					<td bgcolor="#FFFDF0">
+						<div align="center">
+							公告截止时间：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+						<input type="datetime-local" style="width: 200px;height:30px"  valid="isNumber"   maxlength="20"   name="notice_endtime" onclick="WdatePicker({el:customerBirthday,dateFmt:'yyyy-MM-dd HH:mm:ss'})">&nbsp;
+					</td>
+				</tr>
+                <tr>
+					<td bgcolor="#FFFDF0">
+						<div align="center">
+							公告人：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+						<input type="text"  style="width: 200px;height:30px" id= "user" name="user" onblur="blur1()">
+                        <span id="userSpan" style="width: 200px;height:30px"></span>
+						&nbsp;
+					</td>
+				</tr>
+                 <tr>
+					<td bgcolor="#FFFDF0">
+						<div align="center">
+							公告内容：
+						</div>
+					</td>
+					<td colspan="3" bgcolor="#FFFFFF">
+						<textarea name="notice_content" style="width:300px;height:100px;">请在此处输入文本...</textarea>
+						&nbsp;
+					</td>
+				</tr>
+
+			</table>
+			<table class=editTable cellSpacing=1 cellPadding=0 width="100%"
+				align=center border=0>
+				<tr bgcolor="#ECF3FD">
+					<td width="14%"></td>
+					<td width="17%"><input type="submit" name="submit"  value="提交" ></td>
+					<td width="4%"><input type="reset" name="button"  value="重置"></td>
+					<td width="43%"></td>
+				</tr>
+			</table>
+
+		</form>
+
+	</body>
+</html>

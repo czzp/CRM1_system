@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function userName1() {
+            var flag2 = false;
+            var user1 = $('#user').val();
+            $('#userSpan').html(user1);
+            for(var i=0;i<userList.length;i++){
+                if (userList[i].user_name == user1){
+                    flag2 = true
+                }
+            }
+            if(flag2){
+                $('#userSpan').html('没有此人');
+                $('#userSpan').css('color:red')
+            }
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
